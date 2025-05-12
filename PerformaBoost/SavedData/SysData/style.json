@@ -1,0 +1,25 @@
+{
+    "dark-mode": {
+        "background-color": "#000010",
+        "frame-color": "#000010",
+        "text-color": "#ffffff",
+        "entry-bg": "#1e1e2f",
+        "entry-fg": "#ffffff",
+        "insert-color": "#ffffff",
+        "active-button-bg": "#222244",
+        "button-fg": "#ffffff",
+        "select-color": "#1e1e2f"
+    },
+    "light-mode": {
+        "background-color": "#ffffff",
+        "frame-color": "#000010",
+        "text-color": "#ffffff",
+        "entry-bg": "#1e1e2f",
+        "entry-fg": "#ffffff",
+        "insert-color": "#ffffff",
+        "active-button-bg": "#222244",
+        "button-fg": "#ffffff",
+        "select-color": "#1e1e2f"
+    }
+    
+}
