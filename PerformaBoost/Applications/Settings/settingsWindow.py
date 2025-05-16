@@ -12,12 +12,8 @@ def saveSettings():
     # Speichere Änderungen dauerhaft in dataManager
     is_dark = checkbox_var.get()
     selected_language = language_combobox.get()
-    print(f"[save] Dark mode is: {is_dark}")
-    print(f"[save] Selected language: {selected_language}")
+    
 
-    
-    
-        
     # Save settings
     try:
         theme_value = "dark-mode" if is_dark else "light-mode"
@@ -40,8 +36,7 @@ def create_settings_window():
 
     # Theme from dataManager
     theme = dataManager.findAndGetKeyValue("theme")
-    backgroundColor = dataManager.findAndGetKeyValue(theme, "background-color")
-
+    
     checkbox_var = tk.BooleanVar(value=(theme == "dark-mode"))
 
     # Language from dataManager
@@ -50,15 +45,13 @@ def create_settings_window():
     
     
     
-    
-
-    mainContainer = Frame(windowManager.root, bg=backgroundColor)
+    mainContainer = Frame(windowManager.root)
     mainContainer.pack(fill="both", expand=True)
 
-    contentFrame = Frame(mainContainer, bg=backgroundColor)
+    contentFrame = Frame(mainContainer)
     contentFrame.pack(side="top", fill="both", expand=True)
 
-    settingsFrame = Frame(contentFrame, width=200, bg=backgroundColor)
+    settingsFrame = Frame(contentFrame, width=200)
     settingsFrame.pack(side="left", fill="both")
 
 
@@ -72,9 +65,6 @@ def create_settings_window():
         checkbox.select()
     
 
-
-    
-   
 
     language_combobox = ttk.Combobox(settingsFrame, values=languages)
     language_combobox.set(current_language if current_language in languages else languages[0])
@@ -92,7 +82,7 @@ def create_settings_window():
     language_combobox.grid(pady=10)
 
     # Footer mit Buttons
-    footerFrame = Frame(windowManager.root, bg=backgroundColor)
+    footerFrame = Frame(windowManager.root)
     footerFrame.pack(side="bottom", fill="x")
 
     save_button = tk.Button(footerFrame, text="Save", command=saveSettings)

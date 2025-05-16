@@ -58,44 +58,63 @@ class WindowManager:
             except:
                 pass
 
+    """
+    Design Funktionen
+    """
+
     def apply_theme(self):
         try:
             self.theme = dataManager.getKeyValueWithFileName("generellSettings.json", "theme")
-            self.backgroundColor = dataManager.getKeyValueWithFileName("style.json", self.theme, "background-color")
+            self.style_manager = dataManager.ThemeStyleManager(self.theme)
+            self.backgroundColor = self.style_manager.get_style_value('background-color')
             self.root.configure(bg=self.backgroundColor)
-            self._update_widget_colors(self.root, self.backgroundColor)
-            print(f"Design neu geladen für Fenster: {self.title}")
+            self._update_widget_colors(self.root)
         except Exception as e:
             print(f"Fehler beim Anwenden des Designs: {e}")
 
-    def _update_widget_colors(self, widget, backgroundColor):
+    def _update_widget_colors(self, widget):
         try:
             widget_type = widget.winfo_class()
+            
+            #Farben ab hier
+            backgroundColor = self.style_manager.get_style_value('bg')          # Hintergrund
+            fordergroundColor = self.style_manager.get_style_value('fg')        # Text
+            buttonColor = self.style_manager.get_style_value('button-color')    # Button Hintergrund
+            button_fg = self.style_manager.get_style_value("button-fg")         # Button Text
+            entry_color = self.style_manager.get_style_value('entry-bg')        # Eingabefelder Hintergrund
+            entry_fg_color = self.style_manager.get_style_value('entry-fg')     # Eingabefelder Text
+            insert_bg = self.style_manager.get_style_value('insert-bg')         # 
 
+           
             if widget_type in ["TFrame", "TLabelframe"]:
                 widget.configure(style="Custom.TFrame")  # optional via Style
             elif isinstance(widget, (tk.Tk, tk.Toplevel, tk.Frame, tk.LabelFrame)):
                 widget.configure(bg=backgroundColor)
             elif isinstance(widget, tk.Label):
-                widget.configure(bg=backgroundColor, fg="#FFFFFF")
+                widget.configure(bg=backgroundColor, fg=fordergroundColor, font=("Arial", 14))
             elif isinstance(widget, tk.Button):
-                widget.configure(bg=backgroundColor, fg="#FFFFFF", activebackground="#222244")
+                widget.configure(bg=buttonColor, fg=fordergroundColor)
+
+
             elif isinstance(widget, tk.Checkbutton):
-                widget.configure(bg=backgroundColor, fg="#FFFFFF", selectcolor=backgroundColor)
+                widget.configure(bg=backgroundColor, fg=button_fg, selectcolor=backgroundColor)
+
+
             elif isinstance(widget, tk.Entry):
-                widget.configure(bg="#1e1e2f", fg="#ffffff", insertbackground="#ffffff")
+                widget.configure(bg=entry_color, fg=entry_fg_color, insertbackground=insert_bg)
             elif isinstance(widget, tk.Text):
-                widget.configure(bg="#1e1e2f", fg="#ffffff", insertbackground="#ffffff")
+                widget.configure(bg="#1e1e2f", fg="#ffffff", insertbackground=insert_bg)
             elif widget_type == "TCombobox":
                 self._style_ttk_combobox(widget, backgroundColor)
             # Weitere ttk Widgets hier einbauen
+            
 
         except Exception as e:
             print(f"Fehler beim Anpassen von {widget}: {e}")
 
         # Rekursiv alle Kinder
         for child in widget.winfo_children():
-            self._update_widget_colors(child, backgroundColor)
+            self._update_widget_colors(child)
 
     def _style_ttk_combobox(self, widget, backgroundColor):
         try:
@@ -107,12 +126,17 @@ class WindowManager:
             # Nutze eine eindeutige Style-ID, um Konflikte zu vermeiden
             style_name = f"{widget.winfo_id()}.TCombobox"
 
+            # Hole die Farben aus dem Theme
+            field_bg = self.style_manager.get_style_value('entry-bg')
+            fg_color = self.style_manager.get_style_value('fg')
+            arrow_color = fg_color
+
             # Optional: Style vorher zurücksetzen (nicht direkt möglich, aber durch Neuvergabe)
             style.configure(style_name,
-                            fieldbackground=backgroundColor,
+                            fieldbackground=field_bg,
                             background=backgroundColor,
-                            foreground="#000000" if self._is_light_color(backgroundColor) else "#FFFFFF",
-                            arrowcolor="#000000" if self._is_light_color(backgroundColor) else "#FFFFFF")
+                            foreground=fg_color,
+                            arrowcolor=arrow_color)
 
             widget.configure(style=style_name)
         except Exception as e:
@@ -123,7 +147,9 @@ class WindowManager:
         global openWindows
         for wm in openWindows.values():
             wm.apply_theme()
-        
+
+
+
     def print_all_open_window_titles():
         global openWindows
         print("Offene Fenster:")
@@ -132,6 +158,7 @@ class WindowManager:
 
 
     def run(self):
+        self.apply_theme()  # Apply the theme before starting the mainloop
         self.root.mainloop()
 
     

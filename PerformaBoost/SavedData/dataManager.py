@@ -5,6 +5,43 @@ from Applications.FileManager import fileFinder
 currentFolder = currentFolder = os.path.dirname(os.path.abspath(__file__))
 sysDataPath = os.path.join(currentFolder, "SysData")
 
+class ThemeStyleManager:
+    def __init__(self, theme_name):
+        """
+        Initialize the ThemeStyleManager with a specific theme.
+        Loads the style data from style.json.
+        
+        Args:
+            theme_name (str): Name of the theme to load (e.g., 'dark-mode' or 'light-mode')
+        """
+        self.theme_name = theme_name
+        self.style_data = self._load_theme_data()
+
+    def _load_theme_data(self):
+        """Load the theme data from style.json"""
+        style_path = os.path.join(sysDataPath, "style.json")
+        try:
+            with open(style_path, 'r') as file:
+                data = json.load(file)
+                if self.theme_name in data:
+                    return data[self.theme_name]
+                else:
+                    raise ValueError(f"Theme '{self.theme_name}' not found in style.json")
+        except FileNotFoundError:
+            raise FileNotFoundError(f"Could not find style.json at {style_path}")
+
+    def get_style_value(self, key):
+        """
+        Get a style value by its key.
+        
+        Args:
+            key (str): The style key to retrieve
+            
+        Returns:
+            The value associated with the key, or None if not found
+        """
+        return self.style_data.get(key)
+
 
 def getKeyValueFromFile(path, key, secondkey=None):
     try:
@@ -35,7 +72,6 @@ def findAndGetKeyValue(key, secondkey=None):
             file_path = os.path.join(sysDataPath, filename)
             value = getKeyValueFromFile(file_path, key, secondkey)
             if value is not None:
-                print(f"Found in {filename}: {value}")
                 return value
     print("Key not found in Function getKeyValue")
     return ""
@@ -53,8 +89,6 @@ def setKeyValue(filename, key, value):
         if os.path.exists(file_path):
             with open(file_path, 'r') as file:
                 data = json.load(file)
-                print("Datei gefunden")
-                print(data)
         else:
             print("Datei " + file_path + "nicht vorhanden")
             return

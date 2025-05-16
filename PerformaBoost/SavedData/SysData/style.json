@@ -1,25 +1,26 @@
 {
     "dark-mode": {
-        "background-color": "#000010",
-        "frame-color": "#000010",
-        "text-color": "#ffffff",
+        "bg": "#000010",
+        "fg": "#333333",
+        "button-color": "#e0e0e0",
+        "button-fg": "#ffffff",
         "entry-bg": "#1e1e2f",
         "entry-fg": "#ffffff",
-        "insert-color": "#ffffff",
-        "active-button-bg": "#222244",
-        "button-fg": "#ffffff",
-        "select-color": "#1e1e2f"
+        "insert-bg": "#ffffff"
+
+
     },
     "light-mode": {
-        "background-color": "#ffffff",
-        "frame-color": "#000010",
-        "text-color": "#ffffff",
+        "bg": "#f9f9f9",
+        "fg": "#333333",
+        "button-color": "#e0e0e0",
+        "button-fg": "#000000",
         "entry-bg": "#1e1e2f",
         "entry-fg": "#ffffff",
-        "insert-color": "#ffffff",
-        "active-button-bg": "#222244",
-        "button-fg": "#ffffff",
-        "select-color": "#1e1e2f"
+        "insert-bg": "#ffffff"
+        
+
+
     }
     
 }
